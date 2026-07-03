@@ -19,3 +19,9 @@ obj/
 appsettings.*.Local.json
 *.env
 secrets.json
+
+# ISO/IEC 24772-1 single-user-licensed extracts — must NOT be published (copying/networking prohibited)
+taxonomy_of_programming_language.txt
+Vulnerability_list.txt
+vulnerability_list.ods
+*.ods
