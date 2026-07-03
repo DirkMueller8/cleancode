@@ -44,4 +44,6 @@ salting is explicit rather than a bare hash.
 - **Threat mitigated (STRIDE):** InformationDisclosure  ·  **ISO 24772:** [MVX] one-way hash without a salt
 
 ## Open questions
-- Is per-context salt sufficient, or do we want per-field salt too? (Proposed: per-context for the core.)
+- ~~Per-context salt, or also per-field?~~ **Resolved (2026-07-03): per-context.** One salt per
+  (user, log) context. Identical values in *different* contexts already get different digests; per-field
+  salting is deferred as a possible later hardening, not built now.

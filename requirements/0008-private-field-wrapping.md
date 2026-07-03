@@ -52,5 +52,7 @@ is a small, replaceable policy (keep it open for extension).
 - **Threat mitigated (STRIDE):** InformationDisclosure (raw private value withheld)  ·  **ISO 24772:** —
 
 ## Open questions
-- How is the type prefix chosen — from field name, or an explicit per-field config? (Proposed: field
-  name mapped by a small default policy, overridable later.)
+- ~~How is the type prefix chosen?~~ **Resolved (2026-07-03):** a small default policy maps the field
+  name to a prefix (`user`→`USER`, `password`→`PW`), falling back to the uppercased field name for
+  unmapped fields. A per-field override may be added later. The mapping is a replaceable policy
+  (`IPrefixPolicy`), kept open for extension.
