@@ -1,4 +1,5 @@
 using Logger.Core;
+using static Logger.Core.Tests.Build;
 
 namespace Logger.Core.Tests;
 
@@ -7,9 +8,6 @@ namespace Logger.Core.Tests;
 /// </summary>
 public sealed class SchemaTests
 {
-    private static FieldDefinition Field(string name, FieldType type = FieldType.String) =>
-        new(name, type);
-
     // AC: The supported field types are exactly Time, IpAddress, String, Integer.
     [Fact]
     public void FieldType_SupportedValues_AreExactlyTheFour()
@@ -55,7 +53,7 @@ public sealed class SchemaTests
         var login = new LogType("login", new[] { Field("timestamp", FieldType.Time), Field("user") });
         var logout = new LogType("logout", new[] { Field("timestamp", FieldType.Time), Field("user") });
 
-        var schema = new Schema(new[] { login, logout });
+        Schema schema = SchemaOf(login, logout);
 
         Assert.Equal(2, schema.LogTypes.Count);
         Assert.True(schema.TryGetLogType("login", out LogType? found));
@@ -70,13 +68,12 @@ public sealed class SchemaTests
         var first = new LogType("login", new[] { Field("timestamp", FieldType.Time), Field("user") });
         var second = new LogType("login", new[] { Field("timestamp", FieldType.Time), Field("ip") });
 
-        ArgumentException ex = Assert.Throws<ArgumentException>(() =>
-            new Schema(new[] { first, second }));
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => SchemaOf(first, second));
 
         Assert.Contains("login", ex.Message);
     }
 
-    // AC: Names are compared case-sensitively ("user" and "User" are distinct).
+    // AC: Field and log-type names are compared case-sensitively.
     [Fact]
     public void LogType_TreatsFieldNames_CaseSensitively()
     {
@@ -93,7 +90,7 @@ public sealed class SchemaTests
         var lower = new LogType("login", new[] { Field("timestamp", FieldType.Time), Field("user") });
         var upper = new LogType("Login", new[] { Field("timestamp", FieldType.Time), Field("user") });
 
-        var schema = new Schema(new[] { lower, upper });
+        Schema schema = SchemaOf(lower, upper);
 
         Assert.Equal(2, schema.LogTypes.Count);
         Assert.True(schema.TryGetLogType("login", out _));
@@ -105,11 +102,11 @@ public sealed class SchemaTests
     [InlineData("")]
     [InlineData("   ")]
     public void FieldDefinition_WithBlankName_IsRejected(string name) =>
-        Assert.Throws<ArgumentException>(() => new FieldDefinition(name, FieldType.String));
+        Assert.Throws<ArgumentException>(() => new FieldDefinition(name, FieldType.String, Disposition.Nonsensitive));
 
     [Fact]
     public void FieldDefinition_WithNullName_IsRejected() =>
-        Assert.Throws<ArgumentNullException>(() => new FieldDefinition(null!, FieldType.String));
+        Assert.Throws<ArgumentNullException>(() => new FieldDefinition(null!, FieldType.String, Disposition.Nonsensitive));
 
     [Fact]
     public void LogType_WithNullFields_IsRejected() =>

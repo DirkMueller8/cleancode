@@ -13,6 +13,20 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-03 — 0004 Every field must declare a disposition
+- **Concept:** Dependency Inversion + Interface Segregation; "make illegal states unrepresentable."
+- **Why this design:** 0004 needed to validate disposition names at build time, but the real filter
+  registry is REQ-0013 (later). Instead of pulling 0013 forward, I introduced a *minimal* abstraction
+  `IFilterRegistry` with one method, `IsRegistered(name)` — the only thing 0004 consumes (ISP). `Schema`
+  depends on the abstraction (DIP) and is tested with a `FakeFilterRegistry` stub, so no real filters
+  are needed yet. Making `Disposition` a required, non-null constructor arg on `FieldDefinition` means
+  "every field must declare a disposition" is enforced by the type system, not a runtime check I could
+  forget.
+- **Remember:** When requirement A depends on requirement B that isn't built yet, don't build B early —
+  extract the *smallest* interface A actually needs and stub it in tests. The seam is real; the
+  implementation can wait. Also: I deliberately did **not** special-case `nonsensitive`/`private` — they
+  validate through the registry like any name, so there's one rule, not two (matches REQ-0013).
+
 ### 2026-07-03 — 0002 Define a log schema of typed fields
 - **Concept:** Immutable value objects + "validate in the constructor" (make illegal states unrepresentable).
 - **Why this design:** `Schema` → `LogType` → `FieldDefinition` each validate their invariants in the
