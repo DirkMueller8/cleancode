@@ -3,12 +3,12 @@ id: REQ-0002
 slug: define-log-schema
 title: Define a log schema of typed fields
 epic: Schema & Validation
-status: Draft
+status: Done
 priority: Must
 scope: now
 verification: test
 source: ["DSS §5", "DSS §6.3"]
-satisfied_by: []
+satisfied_by: ["tests/Logger.Core.Tests/SchemaTests.cs"]
 concepts: [SRP, ValueObject]
 stride: [Tampering]
 iso24772: []
@@ -32,11 +32,11 @@ Schema:
 ```
 
 ## Acceptance criteria
-- [ ] A schema can hold multiple LogTypes, each retrievable by name.
-- [ ] A LogType exposes its fields, each with a name and a type.
-- [ ] The supported field types are exactly `Time`, `IpAddress`, `String`, and `Integer`.
-- [ ] Two LogTypes with the same name in one schema are rejected.
-- [ ] A field name duplicated within one LogType is rejected.
+- [x] A schema can hold multiple LogTypes, each retrievable by name.
+- [x] A LogType exposes its fields, each with a name and a type.
+- [x] The supported field types are exactly `Time`, `IpAddress`, `String`, and `Integer`.
+- [x] Two LogTypes with the same name in one schema are rejected.
+- [x] A field name duplicated within one LogType is rejected.
 
 ## Design notes
 Immutable value objects: `Schema` → `LogType` → `FieldDefinition(name, type, disposition)`. Build via
