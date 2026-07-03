@@ -1,0 +1,21 @@
+# .NET build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+
+# IDE / editor
+.vs/
+.idea/
+.vscode/
+
+# Test results
+[Tt]est[Rr]esults/
+*.trx
+*.coverage
+
+# Secrets — never commit these (see guardrails.md)
+appsettings.*.Local.json
+*.env
+secrets.json
