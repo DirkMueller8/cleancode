@@ -14,6 +14,7 @@ Terms trace to the source design doc (**DSS** = *Designing Secure Software*, Koh
 | **Schema** | The declaration of a log's `LogType`s and, per type, the named/typed fields and their dispositions (DSS §5). |
 | **LogType** | A named category of event (e.g. `login`, `logout`) with its own field set. |
 | **Field** | A named, typed data item within an event (e.g. `user`, `ipaddr`). |
+| **Name** (of a field or LogType) | An identifier compared **case-sensitively** (ordinal): `user` and `User` are different names. Uniqueness rules (no duplicate field names in a LogType; no duplicate LogType names in a schema) apply under this comparison. (REQ-0002) |
 | **Disposition** | The per-field rule for how the field appears in a filtered view: `nonsensitive` (`0`), `private`, or a named filter (`minute`, `country`, custom). Every field must declare one. |
 | **Filter** | A component that transforms a field value for the filtered view according to its disposition. Pluggable (Strategy/OCP). |
 | **Filtered view** | A projection of an event in which sensitive fields are wrapped, safe for routine inspection (DSS §2.3). |

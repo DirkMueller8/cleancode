@@ -76,6 +76,30 @@ public sealed class SchemaTests
         Assert.Contains("login", ex.Message);
     }
 
+    // AC: Names are compared case-sensitively ("user" and "User" are distinct).
+    [Fact]
+    public void LogType_TreatsFieldNames_CaseSensitively()
+    {
+        var login = new LogType("login", new[] { Field("user"), Field("User") });
+
+        Assert.Equal(2, login.Fields.Count);
+        Assert.True(login.TryGetField("user", out _));
+        Assert.False(login.TryGetField("USER", out _));
+    }
+
+    [Fact]
+    public void Schema_TreatsLogTypeNames_CaseSensitively()
+    {
+        var lower = new LogType("login", new[] { Field("timestamp", FieldType.Time), Field("user") });
+        var upper = new LogType("Login", new[] { Field("timestamp", FieldType.Time), Field("user") });
+
+        var schema = new Schema(new[] { lower, upper });
+
+        Assert.Equal(2, schema.LogTypes.Count);
+        Assert.True(schema.TryGetLogType("login", out _));
+        Assert.False(schema.TryGetLogType("LOGIN", out _));
+    }
+
     // Argument guards (defensive boundaries per code-policy / ISO 24772 [XYH]).
     [Theory]
     [InlineData("")]
