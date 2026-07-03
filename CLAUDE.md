@@ -30,6 +30,11 @@ Do not skip step 1 for feature work. Trivial fixes (typos, formatting) may skip 
 
 If a requirement conflicts with a guardrail, stop and tell me — do not silently resolve it.
 
+**Writing requirements:** method and quality bar in
+[docs/requirements-engineering.md](docs/requirements-engineering.md); shared terms in
+[requirements/glossary.md](requirements/glossary.md); one file = one singular requirement, indexed in
+[requirements/README.md](requirements/README.md).
+
 ## Environment
 - **Default SDK:** .NET 10 (`10.0.301`) at `C:\Program Files\dotnet`. Target `net10.0`, `LangVersion` = `14.0` (or `latest`).
 - **Fallback:** .NET 9 (`9.0.315`) available on the same machine.

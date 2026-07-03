@@ -1,0 +1,52 @@
+---
+id: REQ-0015
+slug: unfiltered-view
+title: Provide the unfiltered (raw) view to authorized callers
+epic: Filtering Engine
+status: Draft
+priority: Could
+scope: now
+verification: test
+source: ["DSS §2.3", "DSS §5"]
+satisfied_by: []
+concepts: [SRP]
+stride: [InformationDisclosure, ElevationOfPrivilege]
+iso24772: [OYB]
+user_facing: true
+doc_chapter: "Filtering & pseudonyms"
+created: 2026-07-03
+updated: 2026-07-03
+---
+
+## Summary
+As an authorized investigator, I want to retrieve the raw event when strictly necessary, so that I can
+diagnose incidents that the filtered view can't resolve.
+
+## Requirement
+Where a caller is authorized for unfiltered access, the Logger shall return the raw event values; if
+the caller is not authorized, then the Logger shall deny the request.
+
+## Worked example
+```
+Authorized:   returns {user: "SAM", password: ">1<}2{]3[\4/"}
+Unauthorized: request denied (no raw values returned)
+```
+
+## Acceptance criteria
+- [ ] An authorized caller receives the exact raw values.
+- [ ] An unauthorized caller is denied and receives no raw values.
+- [ ] The authorization decision is made through an injected policy, not hard-coded.
+
+## Design notes
+`IUnfilteredAccessPolicy { bool IsAllowed(AccessRequest request); }` — a stub in the core; the real
+approval/token workflow (Epic H) is out of scope now. Keep the raw-return path separate from filtering
+(SRP). Full auth, tokens, and audit logging of the access come later.
+
+## Security & traceability
+- **Why / rationale:** DSS §2.3 permits unfiltered access only "in a controlled manner with proper
+  authorization." Denying by default and never leaking raw values on denial is the key rule.
+- **Source:** DSS §2.3, §5
+- **Threat mitigated (STRIDE):** InformationDisclosure, ElevationOfPrivilege  ·  **ISO 24772:** [OYB] (don't ignore a failed authorization check)
+
+## Open questions
+- The audit-log-the-access requirement (DSS §3) is deferred to Epic H — confirm that split is fine.
