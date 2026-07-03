@@ -19,12 +19,10 @@ updated: 2026-07-03
 ---
 
 ## Summary
-As an operator, I want nonsensitive fields to appear exactly as logged in the filtered view, so that
-routine monitoring keeps full access to the data that carries no privacy risk.
+As an operator, I want nonsensitive fields to appear exactly as logged in the filtered view, so that routine monitoring keeps full access to the data that carries no privacy risk.
 
 ## Requirement
-Where a field's disposition is `nonsensitive`, the Logger shall copy its value unchanged into the
-filtered view.
+Where a field's disposition is `nonsensitive`, the Logger shall copy its value unchanged into the filtered view.
 
 ## Worked example
 ```
@@ -38,8 +36,7 @@ Filtered: http: "POST", url: "login.html"
 
 ## Design notes
 Introduces the Strategy abstraction `IFieldFilter { FilteredValue Apply(FieldValue value, IPseudonymContext context); }`.
-`NonsensitiveFilter` is the first, trivial concrete strategy (ignores the context). Define the
-interface where it's consumed (the filtered-view assembler), keeping it minimal (ISP).
+`NonsensitiveFilter` is the first, trivial concrete strategy (ignores the context). Define the interface where it's consumed (the filtered-view assembler), keeping it minimal (ISP).
 
 ## Security & traceability
 - **Why / rationale:** "Nonsensitive" still means internal-only, but needs no wrapping (DSS §2.3, §5).

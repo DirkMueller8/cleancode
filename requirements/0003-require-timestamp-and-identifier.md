@@ -45,4 +45,6 @@ Enforced in the same schema-building validation as REQ-0002; a distinct rule so 
 - **Threat mitigated (STRIDE):** Repudiation (attributable, time-stamped records)  ·  **ISO 24772:** —
 
 ## Open questions
-- Should specific field(s) be markable as "the" identifier, or is "any other field" sufficient for the core? (Proposed: any other field.)
+- ~~Should specific field(s) be markable as "the" identifier?~~ **Resolved (2026-07-03):** no — an
+  "identifying field" is *any* declared field other than the timestamp. No per-field identifier flag
+  in the core.

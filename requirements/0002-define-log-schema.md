@@ -34,6 +34,7 @@ Schema:
 ## Acceptance criteria
 - [ ] A schema can hold multiple LogTypes, each retrievable by name.
 - [ ] A LogType exposes its fields, each with a name and a type.
+- [ ] The supported field types are exactly `Time`, `IpAddress`, `String`, and `Integer`.
 - [ ] Two LogTypes with the same name in one schema are rejected.
 - [ ] A field name duplicated within one LogType is rejected.
 
@@ -47,4 +48,6 @@ a validating factory/builder so an invalid schema cannot be constructed. Field d
 - **Threat mitigated (STRIDE):** Tampering (well-formed, validated structure)  ·  **ISO 24772:** —
 
 ## Open questions
-- Which built-in field types do we need for the core? (Proposed: Time, IpAddress, String, Integer.)
+- ~~Which built-in field types do we need for the core?~~ **Resolved (2026-07-03):** exactly
+  `Time`, `IpAddress`, `String`, `Integer`. Modelled as a closed set (e.g. an enum or sealed type
+  hierarchy) so an unknown type can't be declared.

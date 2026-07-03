@@ -19,12 +19,10 @@ updated: 2026-07-03
 ---
 
 ## Summary
-As an application author, I want Logger to reject events that don't match my declared schema, so that
-stored logs stay well-formed and trustworthy.
+As an application author, I want Logger to reject events that don't match my declared schema, so that stored logs stay well-formed and trustworthy.
 
 ## Requirement
-When an event is submitted for a LogType, the Logger shall accept it only if the event's fields match
-the declared field names and types of that LogType.
+When an event is submitted for a LogType, the Logger shall accept it only if the event's fields match the declared field names and types of that LogType.
 
 ## Worked example
 ```
@@ -43,14 +41,14 @@ Rejected:  {timestamp: 1234567890, ipaddr: "12.34.56.78", user: "SAM", extra: "x
 - [ ] Submitting an event for an unknown LogType is rejected.
 
 ## Design notes
-`SchemaValidator.Validate(logType, event)` returning a result (valid / list of violations). Type
-checking uses the field types from REQ-0002. Keep validation separate from filtering (SRP).
+`SchemaValidator.Validate(logType, event)` returning a result (valid / list of violations). Type checking uses the field types from REQ-0002. Keep validation separate from filtering (SRP).
 
 ## Security & traceability
-- **Why / rationale:** Only schema-conformant data should enter the log (DSS §5/§6.3); this also
-  guards conversion errors when values are later interpreted.
+- **Why / rationale:** Only schema-conformant data should enter the log (DSS §5/§6.3); this also guards conversion errors when values are later interpreted.
 - **Source:** DSS §5, §6.3
 - **Threat mitigated (STRIDE):** Tampering (malformed events can't enter the log)  ·  **ISO 24772:** [FLC] conversion errors
 
 ## Open questions
-- Are unknown extra fields a hard rejection or a warning? (Proposed: rejection, per "must match".)
+- ~~Unknown extra fields — reject or warn?~~ **Resolved (2026-07-03):** hard **rejection**, per "must
+  match". An event carrying any field absent from the schema is rejected (already covered by the
+  acceptance criteria).

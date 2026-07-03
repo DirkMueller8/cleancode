@@ -40,6 +40,9 @@ Accepted:  user:String  disposition=private
 
 ## Design notes
 `Disposition` value object: either a well-known kind (`Nonsensitive`, `Private`) or a named custom filter resolved via the filter registry (REQ-0013). Validation belongs with schema construction.
+**Consequence of the resolved question below:** schema construction is validated *against the filter
+registry*, so building a schema takes the registry as a dependency (the builder/factory receives it).
+An unknown disposition name fails at build time, not at first use.
 
 ## Security & traceability
 - **Why / rationale:** DSS §5 makes declaring disposition mandatory precisely to force an explicit, reviewed choice per field — the opposite of accidental disclosure.
@@ -47,4 +50,6 @@ Accepted:  user:String  disposition=private
 - **Threat mitigated (STRIDE):** InformationDisclosure (no un-classified field can be logged)  ·  **ISO 24772:** —
 
 ## Open questions
-- Do we validate a named custom disposition at schema-build time (requires the registry) or defer to first use? (Proposed: at build time, so bad schemas fail fast.)
+- ~~Validate a named custom disposition at build time or first use?~~ **Resolved (2026-07-03):** at
+  **schema-build time**, so bad schemas fail fast. Schema construction therefore depends on the filter
+  registry (see Design notes).
