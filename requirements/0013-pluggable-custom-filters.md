@@ -48,10 +48,11 @@ built-in strategies (nonsensitive, private, minute, country) already exercise th
 never switches on type. Built-ins are registered the same way custom ones are (no special-casing).
 
 ## Security & traceability
-- **Why / rationale:** DSS §5: "Filters should be defined by pluggable components and easily extended
-  to support custom data types."
+- **Why / rationale:** DSS §5: "Filters should be defined by pluggable components and easily extended to support custom data types."
 - **Source:** DSS §5
 - **Threat mitigated (STRIDE):** —  ·  **ISO 24772:** —
 
 ## Open questions
-- Duplicate registration: reject, or last-wins override? (Proposed: reject, to avoid silent surprises.)
+- ~~Duplicate registration: reject or last-wins?~~ **Resolved (2026-07-03): reject.** Registering a
+  second filter under an existing disposition name is an error, to avoid a silently overridden filter.
+  (Already reflected in the acceptance criteria.)

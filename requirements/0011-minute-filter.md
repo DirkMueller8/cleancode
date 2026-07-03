@@ -47,5 +47,6 @@ context needed. Confirms the Strategy seam works for non-string, non-wrapped tra
 - **Threat mitigated (STRIDE):** InformationDisclosure (timing precision reduced)  ·  **ISO 24772:** —
 
 ## Open questions
-- Floor vs nearest? DSS says "rounded to the nearest minute"; we floor for determinism and because it
-  never reveals a later minute. (Confirm this reading is acceptable.)
+- ~~Floor vs nearest?~~ **Resolved (2026-07-03): floor.** This is a *deliberate deviation* from
+  DSS §5 ("nearest minute"): flooring is deterministic and never reveals a later minute than the event.
+  Recorded as an intentional, reviewed departure from the source, not an oversight.

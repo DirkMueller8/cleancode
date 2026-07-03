@@ -19,12 +19,10 @@ updated: 2026-07-03
 ---
 
 ## Summary
-As an authorized investigator, I want to retrieve the raw event when strictly necessary, so that I can
-diagnose incidents that the filtered view can't resolve.
+As an authorized investigator, I want to retrieve the raw event when strictly necessary, so that I can diagnose incidents that the filtered view can't resolve.
 
 ## Requirement
-Where a caller is authorized for unfiltered access, the Logger shall return the raw event values; if
-the caller is not authorized, then the Logger shall deny the request.
+Where a caller is authorized for unfiltered access, the Logger shall return the raw event values; if the caller is not authorized, then the Logger shall deny the request.
 
 ## Worked example
 ```
@@ -38,15 +36,14 @@ Unauthorized: request denied (no raw values returned)
 - [ ] The authorization decision is made through an injected policy, not hard-coded.
 
 ## Design notes
-`IUnfilteredAccessPolicy { bool IsAllowed(AccessRequest request); }` — a stub in the core; the real
-approval/token workflow (Epic H) is out of scope now. Keep the raw-return path separate from filtering
-(SRP). Full auth, tokens, and audit logging of the access come later.
+`IUnfilteredAccessPolicy { bool IsAllowed(AccessRequest request); }` — a stub in the core; the real approval/token workflow (Epic H) is out of scope now. Keep the raw-return path separate from filtering (SRP). Full auth, tokens, and audit logging of the access come later.
 
 ## Security & traceability
-- **Why / rationale:** DSS §2.3 permits unfiltered access only "in a controlled manner with proper
-  authorization." Denying by default and never leaking raw values on denial is the key rule.
+- **Why / rationale:** DSS §2.3 permits unfiltered access only "in a controlled manner with proper authorization." Denying by default and never leaking raw values on denial is the key rule.
 - **Source:** DSS §2.3, §5
 - **Threat mitigated (STRIDE):** InformationDisclosure, ElevationOfPrivilege  ·  **ISO 24772:** [OYB] (don't ignore a failed authorization check)
 
 ## Open questions
-- The audit-log-the-access requirement (DSS §3) is deferred to Epic H — confirm that split is fine.
+- ~~Is deferring the audit-log-the-access requirement (DSS §3) to Epic H acceptable?~~ **Resolved
+  (2026-07-03): yes.** This requirement covers the authorize/deny + raw-return decision only; logging
+  that an unfiltered access *occurred* is a separate requirement in Epic H (0035, audit trail).

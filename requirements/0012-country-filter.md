@@ -50,5 +50,6 @@ mechanics of REQ-0008/0009 with an external lookup — a good second DIP example
 - **Threat mitigated (STRIDE):** InformationDisclosure (address withheld, geography retained)  ·  **ISO 24772:** —
 
 ## Open questions
-- Where does the address-family hint live — on the pseudonym here, or generalized into REQ-0008's hint
-  policy? (Proposed: reuse the same hint mechanism.)
+- ~~Where does the address-family hint live?~~ **Resolved (2026-07-03):** reuse REQ-0008's shared
+  hint mechanism — `CountryFilter` produces the `(v4)`/`(v6)` hint through the same pseudonym-hint
+  path, not a bespoke one. Keeps one hint policy across all filters (DRY).
