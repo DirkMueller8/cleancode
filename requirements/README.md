@@ -35,8 +35,8 @@ The Logger domain, decomposed. Authored files are linked; backlog rows become fi
 | [0008](0008-private-field-wrapping.md) | Wrap private fields as pseudonyms + hint | Must | now | Done ✅ |
 | [0009](0009-pseudonym-stability-in-context.md) | Equal values → equal pseudonyms in a context | Must | now | Done ✅ |
 | [0010](0010-digest-based-no-raw-retained.md) | Salted-digest mapping, retain no raw value | Must | now | Done ✅ |
-| [0011](0011-minute-filter.md) | Round timestamps to the minute | Should | now | Draft |
-| [0012](0012-country-filter.md) | Map IP → country of origin | Should | now | Draft |
+| [0011](0011-minute-filter.md) | Round timestamps to the minute | Should | now | Done ✅ |
+| [0012](0012-country-filter.md) | Map IP → country of origin | Should | now | Done ✅ |
 | [0013](0013-pluggable-custom-filters.md) | Pluggable custom filters (OCP) | Must | now | Draft |
 | [0014](0014-assemble-filtered-view.md) | Assemble a full filtered view | Must | now | Draft |
 | [0015](0015-unfiltered-view.md) | Unfiltered view for authorized callers | Could | now | Draft |

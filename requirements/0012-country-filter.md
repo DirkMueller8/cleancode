@@ -3,13 +3,13 @@ id: REQ-0012
 slug: country-filter
 title: Map IP addresses to country of origin in the filtered view
 epic: Filtering Engine
-status: Draft
+status: Done
 priority: Should
 scope: now
 verification: test
 source: ["DSS §5", "DSS §2.3"]
-satisfied_by: []
-concepts: [Strategy, DIP]
+satisfied_by: ["tests/Logger.Core.Tests/CountryFilterTests.cs"]
+concepts: [Strategy, DIP, Reuse]
 stride: [InformationDisclosure]
 iso24772: []
 user_facing: true
@@ -33,10 +33,16 @@ Filtered: US1(v4)          (first distinct US address in this context, IPv4)
 ```
 
 ## Acceptance criteria
-- [ ] An IPv4 address in the US renders as `US<n>(v4)`.
-- [ ] The country is obtained from an injected lookup, not hard-coded.
-- [ ] Two addresses in the same country get the country prefix but distinct sequence numbers.
-- [ ] The address family hint reflects IPv4 vs IPv6.
+- [x] An IPv4 address in the US renders as `US<n>(v4)`.
+- [x] The country is obtained from an injected lookup, not hard-coded.
+- [x] Two addresses in the same country get the country prefix but distinct sequence numbers.
+- [x] The address family hint reflects IPv4 vs IPv6.
+
+<!-- As built (2026-07-04): country is used as the pseudonym prefix, so per-prefix numbering makes all
+US addresses share the "US" counter (US1, US2). Address family from System.Net.IPAddress. Renders via
+the shared `Pseudonym.Format` helper (DRY) that PrivateFilter also uses. No geo DB in the core —
+`IGeoLookup` is a seam stubbed in tests. -->
+
 
 ## Design notes
 `CountryFilter : IFieldFilter` depends on `IGeoLookup { string CountryOf(IpAddress ip); }` (DIP seam,

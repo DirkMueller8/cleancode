@@ -23,6 +23,6 @@ public sealed class PrivateFilter : IFieldFilter
 
         string prefix = this.prefixPolicy.PrefixFor(input.FieldName);
         int sequence = input.Pseudonyms.SequenceFor(prefix, input.Value);
-        return $"{prefix}{sequence}({input.Value.Length})";
+        return Pseudonym.Format(prefix, sequence, input.Value.Length.ToString());
     }
 }

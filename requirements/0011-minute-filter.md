@@ -3,19 +3,19 @@ id: REQ-0011
 slug: minute-filter
 title: Round timestamps to the minute in the filtered view
 epic: Filtering Engine
-status: Draft
+status: Done
 priority: Should
 scope: now
 verification: test
 source: ["DSS §5"]
-satisfied_by: []
+satisfied_by: ["tests/Logger.Core.Tests/MinuteFilterTests.cs"]
 concepts: [Strategy]
 stride: [InformationDisclosure]
-iso24772: []
+iso24772: [XZH]
 user_facing: true
 doc_chapter: "Filtering & pseudonyms"
 created: 2026-07-03
-updated: 2026-07-03
+updated: 2026-07-04
 ---
 
 ## Summary
@@ -33,13 +33,21 @@ Filtered: 2022/10/19 08:09
 ```
 
 ## Acceptance criteria
-- [ ] Seconds and sub-second precision are removed (floored, not rounded to nearest).
-- [ ] `08:09:59` → `08:09`; `08:10:00` → `08:10`.
-- [ ] The unfiltered view retains the full-precision timestamp.
+- [x] Seconds and sub-second precision are removed (floored, not rounded to nearest).
+- [x] `08:09:59` → `08:09`; `08:10:00` → `08:10`.
+- [x] The unfiltered view retains the full-precision timestamp.
 
 ## Design notes
 `MinuteFilter : IFieldFilter`, a second "built-in" strategy operating on a Time value. Pure; no
 context needed. Confirms the Strategy seam works for non-string, non-wrapped transforms.
+
+**As built (2026-07-04):**
+- *Operates on epoch seconds* (the canonical Time form from REQ-0005); floors via
+  `epoch - (epoch mod 60)`. Output is the floored epoch text — rendering `08:09` is a Viewer concern.
+- *Sign-safe floor:* used `((e % 60) + 60) % 60` rather than a bare `e % 60`, which would round toward
+  zero (not down) for negative epochs — avoiding a subtle sign bug (`[XZH]`).
+- The "unfiltered retains full precision" AC holds because filtering is pure and never mutates the
+  source value (verified by a test); the raw value is what the unfiltered view (REQ-0015) returns.
 
 ## Security & traceability
 - **Why / rationale:** Coarsening obscures precise times (DSS §5 lists `minute` as a built-in filter).

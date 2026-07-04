@@ -13,6 +13,19 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0011/0012 Minute + country filters
+- **Concept:** Two more Strategy implementations; DRY extraction; a sign-safe floor; behaviour-preserving refactor.
+- **Why this design:** `MinuteFilter` (floor epoch to the minute) and `CountryFilter` (IP → `US1(v4)` via
+  an injected `IGeoLookup`) are the third and fourth built-in filters — deliberately built *before* the
+  OCP requirement (0013) so the pluggable-filter claim is proven against real variety. Per 0012's
+  resolution I extracted a shared `Pseudonym.Format` and refactored `PrivateFilter` onto it (DRY), then
+  confirmed PrivateFilter's tests stayed green — a behaviour-preserving refactor.
+- **Remember:** The minute floor used `((e % 60) + 60) % 60`, not `e - (e % 60)`, because `%` rounds
+  toward zero in C# — a bare version silently mis-floors negative epochs. Small, real, exactly the kind
+  of `[XZH]` sign bug that boundary thinking catches. And `CountryFilter` reuses the *pseudonym context*
+  seam with the country as the prefix — the same machinery serving a very different-looking filter,
+  which is the sign the abstraction is right.
+
 ### 2026-07-04 — 0008/0009/0010/0016 Private wrapping + pseudonym context (cluster)
 - **Concept:** Building a tightly-coupled cluster together; DIP seams; the parameter object; verifying
   a *structural* property behaviourally.
