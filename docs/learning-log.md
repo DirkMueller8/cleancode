@@ -13,6 +13,18 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0006 Enforce request and field size limits (Epic A complete)
+- **Concept:** Reuse over reinvention; boundary-value testing; one source of truth for constants.
+- **Why this design:** The oversized-input check returns the *same* `ValidationResult` type built for
+  REQ-0005 rather than a new result type — same failure semantics, so reuse it. Limits live in one
+  `Limits` class (change them in one place). Two separate checks because they act on two different
+  inputs: the raw request text (1M limit, service-layer input) vs. the parsed event's field values
+  (10k limit). Kept out of `LogEvent`'s constructor so construction stays total and validation stays a
+  separate concern (SRP + the throw-vs-result rule from 0005).
+- **Remember:** Boundary-value tests (N and N+1) are where off-by-one and `>` vs `>=` bugs live —
+  cheap to write, high signal. And I surfaced the "characters = UTF-16 code units" caveat rather than
+  let `string.Length` silently define an observable behavior.
+
 ### 2026-07-04 — 0005 Accept an event only if it matches its schema
 - **Concept:** Exceptions vs. result objects — matching the mechanism to the *expectedness* of failure.
 - **Why this design:** Bad *schemas* throw (rare, programmer error, caught at build time). Bad *events*
