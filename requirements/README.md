@@ -28,7 +28,7 @@ The Logger domain, decomposed. Authored files are linked; backlog rows become fi
 | [0005](0005-event-conforms-to-schema.md) | Accept an event only if it matches its schema | Must | now | Done ✅ |
 | [0006](0006-size-and-encoding-limits.md) | Enforce request & field size limits | Should | now | Done ✅ |
 
-### Epic B — Filtering Engine · DSS §2.3, §5, §8  *(the SOLID/OCP showcase)*
+### Epic B — Filtering Engine · DSS §2.3, §5, §8  ✅ **complete** *(the SOLID/OCP showcase)*
 | #    | Title | Priority | Scope | Status |
 |------|-------|----------|-------|--------|
 | [0007](0007-nonsensitive-passthrough.md) | Copy nonsensitive fields unchanged | Must | now | Done ✅ |
@@ -39,7 +39,7 @@ The Logger domain, decomposed. Authored files are linked; backlog rows become fi
 | [0012](0012-country-filter.md) | Map IP → country of origin | Should | now | Done ✅ |
 | [0013](0013-pluggable-custom-filters.md) | Pluggable custom filters (OCP) | Must | now | Done ✅ |
 | [0014](0014-assemble-filtered-view.md) | Assemble a full filtered view | Must | now | Done ✅ |
-| [0015](0015-unfiltered-view.md) | Unfiltered view for authorized callers | Could | now | Draft |
+| [0015](0015-unfiltered-view.md) | Unfiltered view for authorized callers | Could | now | Done ✅ |
 
 ### Epic C — Pseudonym-context lifecycle · DSS §8
 | #    | Title | Priority | Scope | Status |

@@ -3,13 +3,13 @@ id: REQ-0015
 slug: unfiltered-view
 title: Provide the unfiltered (raw) view to authorized callers
 epic: Filtering Engine
-status: Draft
+status: Done
 priority: Could
 scope: now
 verification: test
 source: ["DSS §2.3", "DSS §5"]
-satisfied_by: []
-concepts: [SRP]
+satisfied_by: ["tests/Logger.Core.Tests/UnfilteredViewTests.cs"]
+concepts: [SRP, DIP]
 stride: [InformationDisclosure, ElevationOfPrivilege]
 iso24772: [OYB]
 user_facing: true
@@ -31,12 +31,19 @@ Unauthorized: request denied (no raw values returned)
 ```
 
 ## Acceptance criteria
-- [ ] An authorized caller receives the exact raw values.
-- [ ] An unauthorized caller is denied and receives no raw values.
-- [ ] The authorization decision is made through an injected policy, not hard-coded.
+- [x] An authorized caller receives the exact raw values.
+- [x] An unauthorized caller is denied and receives no raw values.
+- [x] The authorization decision is made through an injected policy, not hard-coded.
 
 ## Design notes
 `IUnfilteredAccessPolicy { bool IsAllowed(AccessRequest request); }` — a stub in the core; the real approval/token workflow (Epic H) is out of scope now. Keep the raw-return path separate from filtering (SRP). Full auth, tokens, and audit logging of the access come later.
+
+**As built (2026-07-04):** `UnfilteredViewProvider(IUnfilteredAccessPolicy)` reveals values only when
+the policy allows (deny by default). The result is an `UnfilteredAccessResult`: a **denied result holds
+no values and reading `.Values` throws**, so raw data cannot leak even from a caller that forgets to
+check `IsGranted` — the safety is structural, not a convention (`[OYB]`). Return-a-result (not
+throw-on-deny) because denial is an expected outcome. `AccessRequest` carries user + log only; scope,
+time window, reason, and audit logging are Epic H.
 
 ## Security & traceability
 - **Why / rationale:** DSS §2.3 permits unfiltered access only "in a controlled manner with proper authorization." Denying by default and never leaking raw values on denial is the key rule.

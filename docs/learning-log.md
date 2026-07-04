@@ -13,6 +13,17 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0015 Unfiltered view for authorized callers (Epic B complete)
+- **Concept:** Making a safety property *structural* rather than a convention; deny-by-default; DIP for auth.
+- **Why this design:** `UnfilteredAccessResult` denied → `.Values` throws. That means raw private data
+  can't leak even if a caller forgets to check `IsGranted` — the type makes the mistake impossible
+  rather than merely discouraged. Authorization is an injected `IUnfilteredAccessPolicy` (the real
+  approval/token/audit machinery is Epic H), and denial returns a result rather than throwing because
+  a refused request is an expected outcome, not an error.
+- **Remember:** The strongest safety controls are the ones the compiler/type-system enforces. "Return
+  null on deny" trusts the caller to null-check; "reading Values on a denial throws" doesn't trust
+  anyone. Prefer designs where the unsafe path isn't reachable over designs that document not to take it.
+
 ### 2026-07-04 — 0014 Assemble the filtered view (the integration moment)
 - **Concept:** Composition over abstractions; the payoff of a well-factored engine is a *thin* orchestrator.
 - **Why this design:** `FilteredViewAssembler` is deliberately tiny — walk the fields, resolve each
