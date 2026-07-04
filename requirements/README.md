@@ -38,7 +38,7 @@ The Logger domain, decomposed. Authored files are linked; backlog rows become fi
 | [0011](0011-minute-filter.md) | Round timestamps to the minute | Should | now | Done ✅ |
 | [0012](0012-country-filter.md) | Map IP → country of origin | Should | now | Done ✅ |
 | [0013](0013-pluggable-custom-filters.md) | Pluggable custom filters (OCP) | Must | now | Done ✅ |
-| [0014](0014-assemble-filtered-view.md) | Assemble a full filtered view | Must | now | Draft |
+| [0014](0014-assemble-filtered-view.md) | Assemble a full filtered view | Must | now | Done ✅ |
 | [0015](0015-unfiltered-view.md) | Unfiltered view for authorized callers | Could | now | Draft |
 
 ### Epic C — Pseudonym-context lifecycle · DSS §8

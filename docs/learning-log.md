@@ -13,6 +13,18 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0014 Assemble the filtered view (the integration moment)
+- **Concept:** Composition over abstractions; the payoff of a well-factored engine is a *thin* orchestrator.
+- **Why this design:** `FilteredViewAssembler` is deliberately tiny — walk the fields, resolve each
+  filter by disposition, apply, collect. It holds **no per-disposition logic** (no `switch`), so it
+  composes the six-filter DSS example into one record *and* applies a custom `shout` filter it's never
+  heard of, with the same code. That the orchestrator is trivial is the *evidence* the earlier
+  abstraction work paid off.
+- **Remember:** When the integration layer is boring, the design underneath is right. The whole of Epic
+  B converges here into a single passing end-to-end test — nine requirements composing with no glue
+  code, no special cases. Also: the assembler *trusts* validation happened earlier (SRP — it composes,
+  it doesn't re-validate) but still fails loudly on a broken precondition rather than silently.
+
 ### 2026-07-04 — 0013 Pluggable custom filters (the Open/Closed payoff)
 - **Concept:** Open/Closed Principle, proven; Interface Segregation; retiring a fake once the real thing exists.
 - **Why this design:** The whole epic was sequenced for this moment. With four real filters already
