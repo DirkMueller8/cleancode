@@ -13,6 +13,20 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0050 User-guide generator / DocGen (the "Document" payoff)
+- **Concept:** A DI pipeline; interfaces only at substitution boundaries (YAGNI); verify by *running*, not just testing.
+- **Why this design:** DocGen is a small pipeline — `IRequirementSource → RequirementParser →
+  GuideProjection → IGuideRenderer`, orchestrated by `UserGuideGenerator`. I made interfaces only where
+  something is genuinely swappable: the **source** (in-memory stub for tests vs. filesystem) and the
+  **renderer** (Markdown today, could change). The parser and projection are pure functions with nothing
+  to substitute, so they stayed concrete — interface-izing them would be ceremony, the same speculative
+  abstraction the guardrails forbid. The U/I split is by section *heading* (fixed by the template), so
+  requirement files needed no retrofitted tags. Frontmatter parsed by hand — no external YAML dep (BCL only).
+- **Remember:** Unit tests proved the rules; the real confidence came from **running the tool on the
+  actual 17 requirements** and confirming 3 chapters / 14 entries with zero internal-section leaks and
+  the two `user_facing:false` specs omitted. "Prove it, don't assert it" means exercising the real thing,
+  not just green fixtures. The whole structure we'd maintained for 15 requirements paid off here in one run.
+
 ### 2026-07-04 — 0015 Unfiltered view for authorized callers (Epic B complete)
 - **Concept:** Making a safety property *structural* rather than a convention; deny-by-default; DIP for auth.
 - **Why this design:** `UnfilteredAccessResult` denied → `.Values` throws. That means raw private data

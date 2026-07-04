@@ -72,10 +72,12 @@ The Logger domain, decomposed. Authored files are linked; backlog rows become fi
 | 0035 | Audit trail of unfiltered access | later |
 | 0026–0028, 0032, 0034, 0036–0037 | AES-at-rest, HSM, RAID, secure delete, approval web/email, SSO | out-of-scope-infra |
 
-### Tooling
-| #    | Title | Scope |
-|------|-------|-------|
-| 00xx | Requirements → user-guide generator (`tools/DocGen`) | later (after ~5 requirements stable) |
+### Tooling *(0050+ series)*
+| #    | Title | Scope | Status |
+|------|-------|-------|--------|
+| [0050](0050-user-guide-generator.md) | Requirements → user-guide generator (`tools/DocGen`) | now | Done ✅ |
+
+Run it: `dotnet run --project tools/DocGen` → writes [docs/user/user-guide.md](../docs/user/user-guide.md).
 
 ## Legacy
 - [0001-example-fizzbuzz.md](0001-example-fizzbuzz.md) — predates the current template; kept as a

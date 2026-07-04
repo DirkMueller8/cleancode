@@ -57,10 +57,12 @@ Because this repo is for learning:
 
 ## 6. Document (extract the user guide)
 User documentation is **not written by hand** — it's projected from the requirements. Each
-requirement's **(U)**-tagged sections, for `user_facing: true` items, compile into the user guide,
-grouped by `doc_chapter`. The `tools/DocGen` generator (a planned requirement) performs this; until it
-exists, the guide is *latent* in the corpus — disciplined (U)/(I) tagging is what makes it extractable
-later. Internal sections (rationale, design, tests, traceability) are never emitted.
+requirement's user-facing sections (`Summary`, `Requirement`, `Worked example`), for
+`user_facing: true` items, compile into the user guide, grouped by `doc_chapter`. Internal sections
+(acceptance criteria, design, traceability, open questions) are never emitted.
+
+Run: `dotnet run --project tools/DocGen` → regenerates [../docs/user/user-guide.md](../docs/user/user-guide.md)
+(REQ-0050). Regenerate it after a batch of requirements changes; never edit the guide by hand.
 
 ## Roles
 - **Me:** owns intent, priorities, and approval gates (plan sign-off, "Done").
