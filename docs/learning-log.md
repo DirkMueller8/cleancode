@@ -13,6 +13,19 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0017/0018 Context lifecycle: clear + 24h expiry (Epic C complete)
+- **Concept:** Injecting the clock (`IClock`) to make time-dependent behaviour testable; lifecycle management.
+- **Why this design:** `PseudonymContextRegistry` keys contexts by (user, log); `Clear` discards one so
+  the next access recreates it fresh (0017), and any context idle ≥24h is purged on access (0018). The
+  crucial move is **`IClock`**: instead of reading `DateTimeOffset.UtcNow` inside the registry, the time
+  source is injected. A `FakeClock` in tests can *advance 25 hours instantly* to prove expiry — a test
+  that would otherwise be impossible to write without waiting a day. That's the whole reason `[CCI]`
+  (clock issues) warns against reading the system clock directly in logic.
+- **Remember:** Any behaviour that depends on "now" should take an `IClock`, not call the system clock.
+  It turns an untestable, time-bound rule into a fast, deterministic one. Bonus: the `this.` house rule
+  is **compiler-enforced** (`.editorconfig` + `EnforceCodeStyleInBuild`) — the build failed on three
+  instance calls I wrote without `this.`, so the convention isn't a suggestion, it's a gate.
+
 ### 2026-07-04 — 0050 User-guide generator / DocGen (the "Document" payoff)
 - **Concept:** A DI pipeline; interfaces only at substitution boundaries (YAGNI); verify by *running*, not just testing.
 - **Why this design:** DocGen is a small pipeline — `IRequirementSource → RequirementParser →

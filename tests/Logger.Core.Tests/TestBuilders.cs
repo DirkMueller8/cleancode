@@ -63,3 +63,13 @@ internal sealed class FakeGeoLookup : IGeoLookup
 
     public string CountryOf(string ipAddress) => this.country;
 }
+
+/// <summary>A controllable clock: tests set the start time and advance it deterministically.</summary>
+internal sealed class FakeClock : IClock
+{
+    public FakeClock(DateTimeOffset start) => this.UtcNow = start;
+
+    public DateTimeOffset UtcNow { get; private set; }
+
+    public void Advance(TimeSpan by) => this.UtcNow += by;
+}

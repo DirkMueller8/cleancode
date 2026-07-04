@@ -41,12 +41,12 @@ The Logger domain, decomposed. Authored files are linked; backlog rows become fi
 | [0014](0014-assemble-filtered-view.md) | Assemble a full filtered view | Must | now | Done ✅ |
 | [0015](0015-unfiltered-view.md) | Unfiltered view for authorized callers | Could | now | Done ✅ |
 
-### Epic C — Pseudonym-context lifecycle · DSS §8
+### Epic C — Pseudonym-context lifecycle · DSS §8  ✅ **complete**
 | #    | Title | Priority | Scope | Status |
 |------|-------|----------|-------|--------|
 | [0016](0016-pseudonym-context.md) | Maintain mappings per (user, log) context | Must | now | Done ✅ |
-| 0017 | Clear a context's mappings on request | Should | now | Draft |
-| 0018 | Auto-expire a context after 24h idle `[CCI]` | Should | now | Draft |
+| [0017](0017-clear-context.md) | Clear a context's mappings on request | Should | now | Done ✅ |
+| [0018](0018-expire-context.md) | Auto-expire a context after 24h idle `[CCI]` | Should | now | Done ✅ |
 
 ### Epic D — Query over filtered logs · DSS §7 *(backlog)*
 | #    | Title | Priority | Scope |
