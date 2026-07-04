@@ -6,6 +6,9 @@ it, build, verify, and record what I learned.
 
 ## Start here
 - **[CLAUDE.md](CLAUDE.md)** — the operating manual and index. Read this first.
+- **See it run:** `dotnet run --project samples/LoggerDemo` — a narrated end-to-end demo (raw → filtered
+  view, correlation queries, the inference guard, graduated access, session lifecycle).
+- **Run the tests:** `dotnet test Logger.slnx` · **Regenerate the user guide:** `dotnet run --project tools/DocGen`
 
 ## The rules
 1. **[docs/guardrails.md](docs/guardrails.md)** — hard do/don't (these win).

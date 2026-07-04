@@ -81,6 +81,10 @@ Built in the `Logger.Services` project (in-memory service stubs; depends on `Log
 
 Run it: `dotnet run --project tools/DocGen` → writes [docs/user/user-guide.md](../docs/user/user-guide.md).
 
+| [0051](0051-runnable-demo.md) | Runnable end-to-end demo (`samples/LoggerDemo`) | now | Done ✅ |
+
+Run it: `dotnet run --project samples/LoggerDemo` → narrated end-to-end run of the whole system.
+
 ## Legacy
 - [0001-example-fizzbuzz.md](0001-example-fizzbuzz.md) — predates the current template; kept as a
   reference example only.

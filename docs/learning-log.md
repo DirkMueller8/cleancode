@@ -13,6 +13,18 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0051 Runnable demo (the composition root, made real)
+- **Concept:** The composition root; a library needs a *host* to run; verify-by-demo.
+- **Why this design:** `Logger.Core`/`Logger.Services` are libraries with no entry point — that's correct
+  (the domain shouldn't own a `Main`). `samples/LoggerDemo` is the missing composition root: it wires the
+  filters, schema, session, context, assembler, query engine, and access policy from the *public* API,
+  exactly as a real caller would, and narrates one run. Two demo-only stubs (`IGeoLookup`→"US", an
+  allow-list access policy) stand in for the out-of-scope infrastructure.
+- **Remember:** Some artifacts are verified by *running*, not unit tests. The demo is glue over logic
+  that already has 115 tests; its "acceptance" is that the narrated run produces the expected output —
+  which it did (SAM shows as USER1 across two IPs; the raw-value guess is refused). Building the host is
+  also the best way to *feel* whether an API is pleasant to use — dogfooding your own public surface.
+
 ### 2026-07-04 — 0022–0025 Session state machine + in-memory store (Epic E)
 - **Concept:** State machine; layering (a new `Logger.Services` project depends on `Logger.Core`);
   matching the failure mechanism to the *kind* of failure.
