@@ -48,12 +48,12 @@ The Logger domain, decomposed. Authored files are linked; backlog rows become fi
 | [0017](0017-clear-context.md) | Clear a context's mappings on request | Should | now | Done ✅ |
 | [0018](0018-expire-context.md) | Auto-expire a context after 24h idle `[CCI]` | Should | now | Done ✅ |
 
-### Epic D — Query over filtered logs · DSS §7 *(backlog)*
-| #    | Title | Priority | Scope |
-|------|-------|----------|-------|
-| 0019 | Query by symbolic identifier (e.g. `[IP = US1]`) | Could | now |
-| 0020 | Forbid exact-value match on filtered fields (inference guard) | Should | now |
-| 0021 | Default ordering & paging | Could | later |
+### Epic D — Query over filtered logs · DSS §7
+| #    | Title | Priority | Scope | Status |
+|------|-------|----------|-------|--------|
+| [0019](0019-query-by-symbol.md) | Query by symbolic identifier (e.g. `[IP = US1]`) | Could | now | Done ✅ |
+| [0020](0020-forbid-exact-match-on-filtered-fields.md) | Forbid exact-value match on filtered fields (inference guard) | Should | now | Done ✅ |
+| 0021 | Default ordering & paging | Could | later | Draft |
 
 ### Epic E — Session RPC (in-memory stub) · DSS §6 *(backlog, milestone 2)*
 | #    | Title | Priority | Scope |

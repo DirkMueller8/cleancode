@@ -188,3 +188,61 @@ made in one context do not affect any other context.
 Context A:  SAM -> USER1,  BOB -> USER2
 Context B:  BOB -> USER1            (independent — B has its own counters and salt)
 ```
+
+### Clear a context's mappings on request
+
+As an operator, I want to clear my pseudonym mappings for a fresh start, so that a new investigation
+isn't coloured by identifiers I established during a previous one.
+
+When a user clears the mappings for a (user, log) context, the Logger shall discard that context's
+mappings, so subsequent access re-assigns pseudonyms from scratch.
+
+```
+Context (u, login):  SAM -> USER1,  BOB -> USER2
+clear(u, login)
+Context (u, login):  BOB -> USER1        (fresh — numbering restarts)
+```
+
+### Auto-expire a context after 24h idle
+
+As a privacy owner, I want unused pseudonym mappings to expire automatically, so that identifier maps
+don't accumulate or persist longer than they're needed.
+
+If a (user, log) context has not been accessed for 24 hours, then the Logger shall discard it, so its
+mappings do not persist indefinitely.
+
+```
+Context (u, login) last accessed at 09:00 on day 1
+... 24h+ of no access ...
+Next access -> a fresh context (previous mappings gone)
+```
+
+## Searching the logs
+
+### Query filtered logs by symbolic identifier
+
+As an operator, I want to search filtered logs by the symbolic identifiers I can see (like `US1`), so
+that I can correlate related events without ever knowing the real hidden values.
+
+When a query references a field by a symbolic identifier, the Logger shall return the filtered entries
+whose filtered value for that field carries that identifier (ignoring the format/length hint).
+
+```
+Entries:  { ipaddr: US1(v4), http: POST }   { ipaddr: US2(v4), http: GET }
+Query:    [ipaddr = US1]           ->  first entry only
+Query:    [http = POST]            ->  first entry only (nonsensitive, exact)
+```
+
+### Forbid exact-value queries on pseudonymized fields
+
+As a privacy owner, I want the log search to refuse guesses at hidden values, so that nobody can
+confirm a private value (an IP, a username) just by querying candidate values until one matches.
+
+If a query specifies a raw (non-symbol) value for a pseudonymized field, then the Logger shall reject
+the query rather than evaluate it.
+
+```
+Allowed:   [ipaddr = US1]        (a symbol the user can already see)
+Rejected:  [ipaddr = 1.1.1.1]    (a raw guess — could confirm the hidden value if it matched)
+Allowed:   [http = POST]         (http is nonsensitive — exact values are fine)
+```

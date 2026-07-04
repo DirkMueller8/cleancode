@@ -13,6 +13,19 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0019/0020 Query by symbol + inference-attack guard (Epic D)
+- **Concept:** Security by design — making the *unsafe* operation unrepresentable, not just discouraged.
+- **Why this design:** `FilteredLogQueryEngine` matches on the pseudonym *symbol* (`US1`, hint stripped)
+  so operators correlate without seeing raw values (0019). The interesting part is 0020: the engine is
+  told which fields are pseudonymized and **refuses a raw/guessed value** on them — you can query
+  `[ipaddr = US1]` but not `[ipaddr = 1.1.1.1]`. That closes the inference/oracle attack (guess a value,
+  see if it matches, confirm the hidden value) by making the guess un-askable — the same philosophy as
+  the deny-by-default unfiltered result that throws.
+- **Remember:** A security rule is strongest when the dangerous input can't be expressed. "Reject a
+  raw-value query on a pseudonymized field" is better than "return no results" — returning results (even
+  empty) is an oracle; refusing to evaluate closes it. I surfaced the "symbol shape" heuristic
+  (uppercase letters + digits) as a documented decision, since it defines observable behaviour.
+
 ### 2026-07-04 — 0017/0018 Context lifecycle: clear + 24h expiry (Epic C complete)
 - **Concept:** Injecting the clock (`IClock`) to make time-dependent behaviour testable; lifecycle management.
 - **Why this design:** `PseudonymContextRegistry` keys contexts by (user, log); `Clear` discards one so
