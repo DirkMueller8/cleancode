@@ -7,7 +7,9 @@ namespace Logger.Core;
 /// <list type="bullet">
 ///   <item>duplicate log-type names are rejected (REQ-0002);</item>
 ///   <item>every field's <see cref="Disposition"/> must be registered in the supplied
-///   <see cref="IFilterRegistry"/> — unknown dispositions are rejected at build time (REQ-0004).</item>
+///   <see cref="IFilterRegistry"/> — unknown dispositions are rejected at build time (REQ-0004);</item>
+///   <item>every LogType must declare a timestamp (a field of type <see cref="FieldType.Time"/>) and
+///   at least one other field (REQ-0003).</item>
 /// </list>
 /// </summary>
 public sealed class Schema
@@ -32,6 +34,7 @@ public sealed class Schema
             }
 
             ValidateDispositions(logType, filterRegistry);
+            ValidateHasTimestampAndIdentifier(logType);
         }
     }
 
@@ -50,6 +53,27 @@ public sealed class Schema
                     $"in log type '{logType.Name}'.",
                     nameof(logType));
             }
+        }
+    }
+
+    // REQ-0003: a LogType must have a timestamp (identified by type, not name) plus at least one
+    // other field, so every event is time-stamped and attributable. A second Time field counts as
+    // the "other" field (per the requirement's resolved reading).
+    private static void ValidateHasTimestampAndIdentifier(LogType logType)
+    {
+        bool hasTimestamp = logType.Fields.Any(field => field.Type == FieldType.Time);
+        if (!hasTimestamp)
+        {
+            throw new ArgumentException(
+                $"Log type '{logType.Name}' must declare a timestamp (a field of type {FieldType.Time}).",
+                nameof(logType));
+        }
+
+        if (logType.Fields.Count < 2)
+        {
+            throw new ArgumentException(
+                $"Log type '{logType.Name}' must declare at least one identifying field besides the timestamp.",
+                nameof(logType));
         }
     }
 }

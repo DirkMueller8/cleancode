@@ -13,6 +13,18 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0003 Require a timestamp and one identifying field
+- **Concept:** Choosing the right *level* to enforce an invariant; surfacing silent decisions (again).
+- **Why this design:** Put the rule at `Schema` construction, not in `LogType`. The requirement says
+  "reject the *schema*," it needs no registry, and — the deciding factor — keeping `LogType` a pure
+  structural type meant none of REQ-0002's LogType-only tests broke. Level of enforcement is a real
+  design lever: too low and you couple unrelated concerns; too high and illegal states slip through.
+- **Remember:** The spec was silent on two observable things, so I decided *and documented* both rather
+  than defaulting quietly: (1) "the timestamp" is identified by **type** (`Time`), not the name
+  `"timestamp"`; (2) two `Time` fields are accepted. Each got a line in the requirement and a test.
+  That's the medical-device reflex in miniature — an assumption you can't avoid becomes a written,
+  verified decision, not a buried one.
+
 ### 2026-07-03 — 0004 Every field must declare a disposition
 - **Concept:** Dependency Inversion + Interface Segregation; "make illegal states unrepresentable."
 - **Why this design:** 0004 needed to validate disposition names at build time, but the real filter
