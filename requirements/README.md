@@ -31,7 +31,7 @@ The Logger domain, decomposed. Authored files are linked; backlog rows become fi
 ### Epic B — Filtering Engine · DSS §2.3, §5, §8  *(the SOLID/OCP showcase)*
 | #    | Title | Priority | Scope | Status |
 |------|-------|----------|-------|--------|
-| [0007](0007-nonsensitive-passthrough.md) | Copy nonsensitive fields unchanged | Must | now | Draft |
+| [0007](0007-nonsensitive-passthrough.md) | Copy nonsensitive fields unchanged | Must | now | Done ✅ |
 | [0008](0008-private-field-wrapping.md) | Wrap private fields as pseudonyms + hint | Must | now | Draft |
 | [0009](0009-pseudonym-stability-in-context.md) | Equal values → equal pseudonyms in a context | Must | now | Draft |
 | [0010](0010-digest-based-no-raw-retained.md) | Salted-digest mapping, retain no raw value | Must | now | Draft |

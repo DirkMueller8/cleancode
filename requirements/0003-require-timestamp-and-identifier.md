@@ -26,7 +26,7 @@ If a LogType does not declare a timestamp field and at least one additional iden
 
 ## Worked example
 ```
-Rejected:  LogType "ping" -> fields: timestamp:Time            (no other identifying field)
+Rejected:  LogType "ping" -> fields: timestamp:Time (no other identifying field)
 Accepted:  LogType "ping" -> fields: timestamp:Time, ipaddr:IpAddress
 ```
 
@@ -37,8 +37,7 @@ Accepted:  LogType "ping" -> fields: timestamp:Time, ipaddr:IpAddress
 - [x] The rejection identifies the offending LogType by name.
 
 ## Design notes
-Enforced in the same schema-building validation as REQ-0002/0004; a distinct rule so it maps to its
-own tests. "Identifying field" = any declared field other than the timestamp (kept simple for the core).
+Enforced in the same schema-building validation as REQ-0002/0004; a distinct rule so it maps to its own tests. "Identifying field" = any declared field other than the timestamp (kept simple for the core).
 
 **As built (2026-07-04) — two decisions surfaced (spec was silent on both):**
 - *What is "the timestamp"?* Identified by **type** (`FieldType.Time`), not by a field named
@@ -55,6 +54,4 @@ own tests. "Identifying field" = any declared field other than the timestamp (ke
 - **Threat mitigated (STRIDE):** Repudiation (attributable, time-stamped records)  ·  **ISO 24772:** —
 
 ## Open questions
-- ~~Should specific field(s) be markable as "the" identifier?~~ **Resolved (2026-07-03):** no — an
-  "identifying field" is *any* declared field other than the timestamp. No per-field identifier flag
-  in the core.
+- ~~Should specific field(s) be markable as "the" identifier?~~ **Resolved (2026-07-03):** no — an "identifying field" is *any* declared field other than the timestamp. No per-field identifier flag in the core.

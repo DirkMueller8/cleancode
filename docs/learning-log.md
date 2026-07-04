@@ -13,6 +13,17 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0007 Copy nonsensitive fields unchanged (Epic B begins)
+- **Concept:** Strategy pattern; YAGNI applied to *interface design*.
+- **Why this design:** `IFieldFilter` is the Strategy seam every filter will implement; `NonsensitiveFilter`
+  is the trivial first one (a pure passthrough). I deliberately defined the interface as
+  `string Apply(string value)` — *not* the `Apply(value, context)` the design note sketched — because
+  nothing in 0007 needs a context. Adding it now would be speculative code (guardrail) and would couple
+  the passthrough filter to state it never uses.
+- **Remember:** Interfaces are best grown, not divined. With one implementer, widening `Apply` at
+  REQ-0008 (when the pseudonym context actually appears) is a 2-file change. Watching the interface
+  evolve *is* the lesson — resist the urge to design it "complete" before a requirement demands it.
+
 ### 2026-07-04 — 0006 Enforce request and field size limits (Epic A complete)
 - **Concept:** Reuse over reinvention; boundary-value testing; one source of truth for constants.
 - **Why this design:** The oversized-input check returns the *same* `ValidationResult` type built for

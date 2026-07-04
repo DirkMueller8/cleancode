@@ -51,11 +51,7 @@ a validating factory/builder so an invalid schema cannot be constructed. Field d
 
 ## Open questions
 - ~~Which built-in field types do we need for the core?~~ **Resolved (2026-07-03):** exactly
-  `Time`, `IpAddress`, `String`, `Integer`. Modelled as a closed set (e.g. an enum or sealed type
-  hierarchy) so an unknown type can't be declared.
+  `Time`, `IpAddress`, `String`, `Integer`. Modelled as a closed set (e.g. an enum or sealed type hierarchy) so an unknown type can't be declared.
 - ~~Are names compared case-sensitively or case-insensitively?~~ **Resolved (2026-07-03):
-  case-sensitive.** Raised *after* implementation: the code had silently defaulted to an ordinal
-  (case-sensitive) comparison, which is an observable/functional behaviour no acceptance criterion
-  pinned. Lifted back into the spec as an explicit criterion + glossary definition rather than left as
-  an incidental implementation detail. Case-sensitive matches JSON key semantics and avoids a filter
-  quietly merging two distinct fields; revisit if a real schema needs case-insensitive names.
+  case-sensitive.** Raised *after* implementation: the code had silently defaulted to an ordinal (case-sensitive) comparison, which is an observable/functional behaviour no acceptance criterion
+  pinned. Lifted back into the spec as an explicit criterion + glossary definition rather than left as an incidental implementation detail. Case-sensitive matches JSON key semantics and avoids a filter quietly merging two distinct fields; revisit if a real schema needs case-insensitive names.
