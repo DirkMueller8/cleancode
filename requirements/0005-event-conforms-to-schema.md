@@ -3,19 +3,19 @@ id: REQ-0005
 slug: event-conforms-to-schema
 title: Accept an event only if it matches its LogType schema
 epic: Schema & Validation
-status: Draft
+status: Done
 priority: Must
 scope: now
 verification: test
 source: ["DSS §5", "DSS §6.3"]
-satisfied_by: []
-concepts: [SRP, GuardClause]
+satisfied_by: ["tests/Logger.Core.Tests/EventValidationTests.cs"]
+concepts: [SRP, GuardClause, DIP]
 stride: [Tampering]
-iso24772: [FLC]
+iso24772: [FLC, OYB]
 user_facing: true
 doc_chapter: "Recording events"
 created: 2026-07-03
-updated: 2026-07-03
+updated: 2026-07-04
 ---
 
 ## Summary
@@ -34,14 +34,26 @@ Rejected:  {timestamp: 1234567890, ipaddr: "12.34.56.78", user: "SAM", extra: "x
 ```
 
 ## Acceptance criteria
-- [ ] An event whose fields match the LogType (names + types) is accepted.
-- [ ] An event missing a declared field is rejected.
-- [ ] An event with a field absent from the schema is rejected.
-- [ ] An event with a value that doesn't parse to the declared type is rejected.
-- [ ] Submitting an event for an unknown LogType is rejected.
+- [x] An event whose fields match the LogType (names + types) is accepted.
+- [x] An event missing a declared field is rejected.
+- [x] An event with a field absent from the schema is rejected.
+- [x] An event with a value that doesn't parse to the declared type is rejected.
+- [x] Submitting an event for an unknown LogType is rejected.
 
 ## Design notes
-`SchemaValidator.Validate(logType, event)` returning a result (valid / list of violations). Type checking uses the field types from REQ-0002. Keep validation separate from filtering (SRP).
+`SchemaValidator(schema).Validate(logEvent)` returns a `ValidationResult` (valid / list of violations).
+Type checking uses the field types from REQ-0002. Keep validation separate from filtering (SRP).
+
+**As built (2026-07-04) — decisions surfaced:**
+- *Return a result, don't throw.* Invalid schemas throw (rare, programmer error, build-time); invalid
+  *events* are an **expected** runtime outcome (untrusted, high-volume), so `Validate` returns a
+  `ValidationResult` the caller must inspect — using exceptions for expected control flow would be a
+  design + performance smell. Forces the caller not to ignore the status (ISO 24772 `[OYB]`).
+- *Collect all violations,* not just the first — more useful to the caller (one test proves aggregation).
+- *Event values are text.* A `LogEvent` holds field values as strings (DSS §8: canonical text form);
+  the validator parses each against its declared type (`[FLC]`).
+- *`Time` validates as Unix epoch seconds* (matches the API example `timestamp: 1234567890`). This is
+  the canonical stored form; REQ-0011's `minute` filter will round it. Documented so it isn't incidental.
 
 ## Security & traceability
 - **Why / rationale:** Only schema-conformant data should enter the log (DSS §5/§6.3); this also guards conversion errors when values are later interpreted.

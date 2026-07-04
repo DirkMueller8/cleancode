@@ -37,4 +37,7 @@ internal static class Build
 
     public static Schema SchemaOf(IFilterRegistry registry, params LogType[] logTypes) =>
         new(logTypes, registry);
+
+    public static LogEvent Event(string logTypeName, params (string Name, string Value)[] values) =>
+        new(logTypeName, values.ToDictionary(v => v.Name, v => v.Value, StringComparer.Ordinal));
 }

@@ -25,7 +25,7 @@ The Logger domain, decomposed. Authored files are linked; backlog rows become fi
 | [0002](0002-define-log-schema.md) | Define a log schema of typed fields | Must | now | Done ✅ |
 | [0003](0003-require-timestamp-and-identifier.md) | Require timestamp + ≥1 identifying field | Must | now | Done ✅ |
 | [0004](0004-disposition-mandatory-per-field.md) | Every field must declare a disposition | Must | now | Done ✅ |
-| [0005](0005-event-conforms-to-schema.md) | Accept an event only if it matches its schema | Must | now | Draft |
+| [0005](0005-event-conforms-to-schema.md) | Accept an event only if it matches its schema | Must | now | Done ✅ |
 | [0006](0006-size-and-encoding-limits.md) | Enforce request & field size limits | Should | now | Draft |
 
 ### Epic B — Filtering Engine · DSS §2.3, §5, §8  *(the SOLID/OCP showcase)*

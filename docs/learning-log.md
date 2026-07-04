@@ -13,6 +13,18 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0005 Accept an event only if it matches its schema
+- **Concept:** Exceptions vs. result objects — matching the mechanism to the *expectedness* of failure.
+- **Why this design:** Bad *schemas* throw (rare, programmer error, caught at build time). Bad *events*
+  return a `ValidationResult` — they're an expected, high-volume runtime outcome from untrusted input,
+  so throwing would be both slow and semantically wrong (an invalid event isn't "exceptional"). The
+  result also forces the caller to check `IsValid` rather than silently proceed (ISO 24772 `[OYB]`).
+  The validator collects *all* violations, and is constructed with its `Schema` (injectable, DIP).
+- **Remember:** "Throw or return a result?" is answered by one question — *is this failure expected in
+  normal operation?* If yes, return a result; reserve exceptions for genuine programmer/contract errors.
+  Also surfaced two silent decisions: event values are text (DSS canonical form), and `Time` = Unix
+  epoch seconds — both documented + tested rather than left implicit.
+
 ### 2026-07-04 — 0003 Require a timestamp and one identifying field
 - **Concept:** Choosing the right *level* to enforce an invariant; surfacing silent decisions (again).
 - **Why this design:** Put the rule at `Schema` construction, not in `LogType`. The requirement says

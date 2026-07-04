@@ -28,3 +28,6 @@ vulnerability_list.ods
 *.ods
 # Book notes (e.g. "Designing Secure Software")
 designing_secure_software.txt
+
+# Personal article draft — kept local, not published
+ARTICLE-NOTES.md
