@@ -13,6 +13,18 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0013 Pluggable custom filters (the Open/Closed payoff)
+- **Concept:** Open/Closed Principle, proven; Interface Segregation; retiring a fake once the real thing exists.
+- **Why this design:** The whole epic was sequenced for this moment. With four real filters already
+  behind `IFieldFilter`, the `FilterRegistry` proves a *fifth* (a test-only `ShoutFilter`) needs only a
+  new class + one `Register` call — **zero edits** to any existing filter or the assembler. That's OCP
+  demonstrated against real variety, not a toy. `IFilterRegistry` grew to add `Resolve`, but `Register`
+  stayed off the interface (ISP): query-side clients (`Schema`, the assembler) can't mutate the registry.
+- **Remember:** Sequencing matters — building the OCP seam *after* four concrete strategies made the
+  "open for extension" claim credible and testable. Also: once the real `FilterRegistry` existed, the
+  `FakeFilterRegistry` stub from REQ-0004 was **dead weight**, so I deleted it and wired tests to the
+  real registry — and every prior test stayed green, which is what makes a cleanup safe to do.
+
 ### 2026-07-04 — 0011/0012 Minute + country filters
 - **Concept:** Two more Strategy implementations; DRY extraction; a sign-safe floor; behaviour-preserving refactor.
 - **Why this design:** `MinuteFilter` (floor epoch to the minute) and `CountryFilter` (IP → `US1(v4)` via

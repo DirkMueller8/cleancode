@@ -60,14 +60,4 @@ public sealed class CountryFilterTests
     [Fact]
     public void Apply_NullInput_IsRejected() =>
         Assert.Throws<ArgumentNullException>(() => Filter.Apply(null!));
-
-    /// <summary>A stub geo lookup that reports a fixed country for any address.</summary>
-    private sealed class FakeGeoLookup : IGeoLookup
-    {
-        private readonly string country;
-
-        public FakeGeoLookup(string country) => this.country = country;
-
-        public string CountryOf(string ipAddress) => this.country;
-    }
 }

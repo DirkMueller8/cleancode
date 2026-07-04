@@ -40,7 +40,7 @@ public sealed class DispositionTests
     [Fact]
     public void Schema_WithUnknownDisposition_IsRejected_IdentifyingField()
     {
-        var registry = new FakeFilterRegistry(Disposition.NonsensitiveName); // does NOT know "secret"
+        FilterRegistry registry = RegistryKnowing(Disposition.NonsensitiveName); // does NOT know "secret"
         var login = new LogType("login", new[]
         {
             Field("timestamp", FieldType.Time),

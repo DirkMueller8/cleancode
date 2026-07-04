@@ -2,30 +2,15 @@ using Logger.Core;
 
 namespace Logger.Core.Tests;
 
-/// <summary>
-/// A test double for <see cref="IFilterRegistry"/> that knows a fixed set of disposition names.
-/// Lets schema tests validate dispositions without any real filters (which arrive in Epic B).
-/// </summary>
-internal sealed class FakeFilterRegistry : IFilterRegistry
-{
-    private readonly HashSet<string> known;
-
-    public FakeFilterRegistry(params string[] knownNames) =>
-        this.known = new HashSet<string>(knownNames, StringComparer.Ordinal);
-
-    public bool IsRegistered(string dispositionName) => this.known.Contains(dispositionName);
-}
-
 /// <summary>Small builders to keep the tests readable.</summary>
 internal static class Build
 {
-    /// <summary>A registry that knows the built-in disposition names used across the tests.</summary>
-    public static readonly IFilterRegistry DefaultRegistry =
-        new FakeFilterRegistry(
-            Disposition.NonsensitiveName,
-            Disposition.PrivateName,
-            "minute",
-            "country");
+    public static readonly IHasher Sha256 = new Sha256Hasher();
+
+    public static readonly IGeoLookup Geo = new FakeGeoLookup("US");
+
+    /// <summary>A real registry wired with the four built-in filters (REQ-0013).</summary>
+    public static readonly IFilterRegistry DefaultRegistry = BuildDefaultRegistry();
 
     public static FieldDefinition Field(
         string name,
@@ -41,10 +26,40 @@ internal static class Build
     public static LogEvent Event(string logTypeName, params (string Name, string Value)[] values) =>
         new(logTypeName, values.ToDictionary(v => v.Name, v => v.Value, StringComparer.Ordinal));
 
-    public static readonly IHasher Sha256 = new Sha256Hasher();
-
     public static PseudonymContext PseudoContext(string salt = "salt-A") => new(Sha256, salt);
 
     public static FilterInput Input(string fieldName, string value, IPseudonymContext pseudonyms) =>
         new(fieldName, value, pseudonyms);
+
+    /// <summary>A registry that merely knows a set of disposition names (filter behaviour irrelevant).</summary>
+    public static FilterRegistry RegistryKnowing(params string[] dispositionNames)
+    {
+        var registry = new FilterRegistry();
+        foreach (string name in dispositionNames)
+        {
+            registry.Register(name, new NonsensitiveFilter());
+        }
+
+        return registry;
+    }
+
+    private static FilterRegistry BuildDefaultRegistry()
+    {
+        var registry = new FilterRegistry();
+        registry.Register(Disposition.NonsensitiveName, new NonsensitiveFilter());
+        registry.Register(Disposition.PrivateName, new PrivateFilter(new DefaultPrefixPolicy()));
+        registry.Register("minute", new MinuteFilter());
+        registry.Register("country", new CountryFilter(Geo));
+        return registry;
+    }
+}
+
+/// <summary>A stub geo lookup that reports a fixed country for any address.</summary>
+internal sealed class FakeGeoLookup : IGeoLookup
+{
+    private readonly string country;
+
+    public FakeGeoLookup(string country) => this.country = country;
+
+    public string CountryOf(string ipAddress) => this.country;
 }

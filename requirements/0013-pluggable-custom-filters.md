@@ -3,13 +3,13 @@ id: REQ-0013
 slug: pluggable-custom-filters
 title: Support pluggable custom filters without modifying existing code
 epic: Filtering Engine
-status: Draft
+status: Done
 priority: Must
 scope: now
 verification: test
 source: ["DSS §5"]
-satisfied_by: []
-concepts: [OCP, Strategy, DIP]
+satisfied_by: ["tests/Logger.Core.Tests/FilterRegistryTests.cs"]
+concepts: [OCP, Strategy, DIP, ISP]
 stride: []
 iso24772: []
 user_facing: true
@@ -35,17 +35,28 @@ Filtered:  zip -> ZIP1(5)                  (behavior defined by PostcodeFilter)
 ```
 
 ## Acceptance criteria
-- [ ] A newly registered filter is applied to fields with its disposition name.
-- [ ] Adding a filter requires only a new `IFieldFilter` class plus a registration call — no edits to
+- [x] A newly registered filter is applied to fields with its disposition name.
+- [x] Adding a filter requires only a new `IFieldFilter` class plus a registration call — no edits to
       existing filters or the assembler (verified by the design; demonstrated by a test-only filter).
-- [ ] Registering a duplicate disposition name is rejected (or explicitly overrides — decide below).
-- [ ] An unknown disposition name (never registered) is rejected at schema validation (ties REQ-0004).
+- [x] Registering a duplicate disposition name is rejected (or explicitly overrides — decide below).
+- [x] An unknown disposition name (never registered) is rejected at schema validation (ties REQ-0004).
 
 ## Design notes
 **This is the Open/Closed Principle headline of the epic** — deliberately sequenced after four
 built-in strategies (nonsensitive, private, minute, country) already exercise the seam. A
 `FilterRegistry` maps disposition name → `IFieldFilter`; the assembler resolves filters through it and
 never switches on type. Built-ins are registered the same way custom ones are (no special-casing).
+
+**As built (2026-07-04):**
+- `FilterRegistry : IFilterRegistry` — the concrete registry, finally implementing the interface
+  stubbed at REQ-0004. The interface *grew* to add `Resolve(name) → IFieldFilter`; `Register` is
+  **not** on the interface (ISP) — only the concrete type mutates, and only at composition time, so
+  query-side clients (`Schema`, the assembler) can't register.
+- The OCP claim is demonstrated by a test-only `ShoutFilter`: a new class + one `Register` call, zero
+  edits to any existing filter. Built-ins go through the identical `Register` path (no special-casing).
+- *Cleanup:* the `FakeFilterRegistry` test double (from REQ-0004) was retired now that the real
+  registry exists; the test `DefaultRegistry` is a real `FilterRegistry` wired with the four built-ins.
+  All prior tests stayed green — a behaviour-preserving swap.
 
 ## Security & traceability
 - **Why / rationale:** DSS §5: "Filters should be defined by pluggable components and easily extended to support custom data types."
