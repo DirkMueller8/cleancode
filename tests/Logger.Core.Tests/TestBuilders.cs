@@ -40,4 +40,11 @@ internal static class Build
 
     public static LogEvent Event(string logTypeName, params (string Name, string Value)[] values) =>
         new(logTypeName, values.ToDictionary(v => v.Name, v => v.Value, StringComparer.Ordinal));
+
+    public static readonly IHasher Sha256 = new Sha256Hasher();
+
+    public static PseudonymContext PseudoContext(string salt = "salt-A") => new(Sha256, salt);
+
+    public static FilterInput Input(string fieldName, string value, IPseudonymContext pseudonyms) =>
+        new(fieldName, value, pseudonyms);
 }

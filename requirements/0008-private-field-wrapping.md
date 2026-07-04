@@ -3,13 +3,13 @@ id: REQ-0008
 slug: private-field-wrapping
 title: Wrap private fields as pseudonyms with a format/length hint
 epic: Filtering Engine
-status: Draft
+status: Done
 priority: Must
 scope: now
 verification: test
 source: ["DSS §2.3", "DSS §8"]
-satisfied_by: []
-concepts: [Strategy, OCP]
+satisfied_by: ["tests/Logger.Core.Tests/PrivateFilterTests.cs"]
+concepts: [Strategy, DIP, ParameterObject]
 stride: [InformationDisclosure]
 iso24772: []
 user_facing: true
@@ -34,16 +34,25 @@ Filtered: user: USER1(3), password: PW1(12)
 `USER1(3)` = username field, first distinct value in this context, 3 characters long.
 
 ## Acceptance criteria
-- [ ] A private string yields `<prefix><n>(<length>)` (e.g. a 3-char username → `USER1(3)`).
-- [ ] The raw value never appears anywhere in the filtered output (assert not-contains).
-- [ ] The length hint equals the character length of the raw value.
-- [ ] The type prefix is derived from the field (e.g. `user` → `USER`, `password` → `PW`).
-- [ ] Sequence numbering is per pseudonym-context (see REQ-0009 / REQ-0016).
+- [x] A private string yields `<prefix><n>(<length>)` (e.g. a 3-char username → `USER1(3)`).
+- [x] The raw value never appears anywhere in the filtered output (assert not-contains).
+- [x] The length hint equals the character length of the raw value.
+- [x] The type prefix is derived from the field (e.g. `user` → `USER`, `password` → `PW`).
+- [x] Sequence numbering is per pseudonym-context (see REQ-0009 / REQ-0016).
 
 ## Design notes
 `PrivateFilter : IFieldFilter`. Needs the `IPseudonymContext` (REQ-0016) to allocate/lookup the
 sequence number for a value; stability is REQ-0009; digest-based storage is REQ-0010. Prefix mapping
 is a small, replaceable policy (keep it open for extension).
+
+**As built (2026-07-04):**
+- *Interface grew (as flagged in REQ-0007):* `IFieldFilter.Apply` now takes a `FilterInput` parameter
+  object `{ FieldName, Value, Pseudonyms }` instead of a bare string. A parameter object so future
+  per-call data can be added without churning every filter's signature.
+- *Prefix seam:* `IPrefixPolicy` (default: `user`→`USER`, `password`→`PW`, else uppercased field name).
+- *Numbering is per prefix* (each prefix's counter starts at 1) — matches the DSS example where a first
+  IP, username, and password are all `…1`.
+- *Length hint* uses `Value.Length` (UTF-16 code units, per the REQ-0006 caveat).
 
 ## Security & traceability
 - **Why / rationale:** Minimizes exposure while preserving correlation and a useful shape hint

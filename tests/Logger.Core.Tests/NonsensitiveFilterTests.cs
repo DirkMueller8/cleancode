@@ -1,4 +1,5 @@
 using Logger.Core;
+using static Logger.Core.Tests.Build;
 
 namespace Logger.Core.Tests;
 
@@ -15,16 +16,19 @@ public sealed class NonsensitiveFilterTests
     [InlineData("login.html")]
     [InlineData("")]
     public void Apply_ReturnsValueUnchanged(string value) =>
-        Assert.Equal(value, Filter.Apply(value));
+        Assert.Equal(value, Filter.Apply(Input("http", value, PseudoContext())));
 
     // AC: Filtering is a pure function of the input (same input -> same output, no side effects).
     [Fact]
     public void Apply_IsPure_SameInputSameOutput()
     {
-        Assert.Equal(Filter.Apply("login.html"), Filter.Apply("login.html"));
+        PseudonymContext ctx = PseudoContext();
+        Assert.Equal(
+            Filter.Apply(Input("url", "login.html", ctx)),
+            Filter.Apply(Input("url", "login.html", ctx)));
     }
 
     [Fact]
-    public void Apply_NullValue_IsRejected() =>
+    public void Apply_NullInput_IsRejected() =>
         Assert.Throws<ArgumentNullException>(() => Filter.Apply(null!));
 }

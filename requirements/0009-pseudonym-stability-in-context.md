@@ -3,12 +3,12 @@ id: REQ-0009
 slug: pseudonym-stability-in-context
 title: Map equal values to equal pseudonyms within a context
 epic: Filtering Engine
-status: Draft
+status: Done
 priority: Must
 scope: now
 verification: test
 source: ["DSS §2.3", "DSS §8"]
-satisfied_by: []
+satisfied_by: ["tests/Logger.Core.Tests/PseudonymContextTests.cs", "tests/Logger.Core.Tests/PrivateFilterTests.cs"]
 concepts: [DIP]
 stride: [InformationDisclosure]
 iso24772: []
@@ -35,9 +35,9 @@ Correlation: querying US1 finds every event from 66.77.88.99 without revealing i
 ```
 
 ## Acceptance criteria
-- [ ] Filtering the same value twice in one context yields the identical pseudonym.
-- [ ] Filtering two different values in one context yields different pseudonyms.
-- [ ] Sequence numbers increase in first-seen order within the context.
+- [x] Filtering the same value twice in one context yields the identical pseudonym.
+- [x] Filtering two different values in one context yields different pseudonyms.
+- [x] Sequence numbers increase in first-seen order within the context.
 
 ## Design notes
 The context owns a value→pseudonym map (keyed by digest, REQ-0010). `IPseudonymContext` is the DIP

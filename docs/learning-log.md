@@ -13,6 +13,23 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0008/0009/0010/0016 Private wrapping + pseudonym context (cluster)
+- **Concept:** Building a tightly-coupled cluster together; DIP seams; the parameter object; verifying
+  a *structural* property behaviourally.
+- **Why this design:** A pseudonym is meaningless without a context to be stable within, so these four
+  were designed as one. The context (`PseudonymContext`) owns stable per-prefix numbering (0009), keyed
+  by a **salted digest** via an injected `IHasher` so the raw value is never stored (0010), and is one
+  instance per (user, log) view for isolation (0016). `PrivateFilter` composes a prefix (`IPrefixPolicy`
+  seam) + the context's number + a length hint into `USER1(3)` (0008). Three DIP seams (`IHasher`,
+  `IPseudonymContext`, `IPrefixPolicy`) mean every collaborator is swappable and testable.
+- **The interface grew, as promised.** `IFieldFilter.Apply(string)` became `Apply(FilterInput)` — a
+  parameter object bundling `{ FieldName, Value, Pseudonyms }`, so future per-call data won't churn
+  every filter. Updating `NonsensitiveFilter` was the trivial 2-file change I predicted at 0007.
+- **Remember:** "The context stores no raw value" is a structural claim with no clean public accessor.
+  Rather than expose internals just to assert on them, I proved it **behaviourally**: inject a colliding
+  hasher so two different values collapse to one number — only possible if the *digest* is the key.
+  Prefer a black-box proof over widening visibility for a test.
+
 ### 2026-07-04 — 0007 Copy nonsensitive fields unchanged (Epic B begins)
 - **Concept:** Strategy pattern; YAGNI applied to *interface design*.
 - **Why this design:** `IFieldFilter` is the Strategy seam every filter will implement; `NonsensitiveFilter`
