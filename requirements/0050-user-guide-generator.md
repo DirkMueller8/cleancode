@@ -19,8 +19,7 @@ updated: 2026-07-04
 ---
 
 ## Summary
-As the repo owner, I want the user guide generated from the requirement files, so that user
-documentation never drifts from the specs and I don't hand-write it.
+As the repo owner, I want the user guide generated from the requirement files, so that user documentation never drifts from the specs and I don't hand-write it.
 
 ## Requirement
 The generator shall read the requirement files, select those with `user_facing: true` (excluding
@@ -38,8 +37,7 @@ requirements/0010 (user_facing: false)                            ->  (omitted)
 ## Acceptance criteria
 - [x] Only requirements with `user_facing: true` appear in the guide.
 - [x] Requirements with `scope: out-of-scope-infra` are excluded.
-- [x] For an included requirement, only the U sections appear; internal sections (Acceptance criteria,
-      Design notes, Security & traceability, Open questions) do **not** appear.
+- [x] For an included requirement, only the U sections appear; internal sections (Acceptance criteria, Design notes, Security & traceability, Open questions) do **not** appear.
 - [x] Requirements are grouped by `doc_chapter`; chapters are ordered by their lowest `id`.
 - [x] Non-requirement files (TEMPLATE, README, glossary, the legacy 0001) are ignored.
 - [x] Generation is deterministic — the same inputs produce the same output.
@@ -51,15 +49,12 @@ internal sections and the two user_facing:false requirements (0010, 0050) were c
 
 ## Design notes
 Pipeline `IRequirementSource → RequirementParser → GuideProjection → IGuideRenderer`, orchestrated by
-`UserGuideGenerator.Generate()` which returns the guide text; the console `Program` writes it to
-`docs/user/user-guide.md`. **Interfaces only at substitution boundaries** (source for test injection,
-renderer for output format) — the parser and projection are pure and stay concrete (YAGNI). The
+`UserGuideGenerator.Generate()` which returns the guide text; the console `Program` writes it to `docs/user/user-guide.md`. **Interfaces only at substitution boundaries** (source for test injection, renderer for output format) — the parser and projection are pure and stay concrete (YAGNI). The
 U/I split is by **section heading** (per the template), so requirement files need no inline tags.
 Frontmatter is parsed directly (`key: value`) — no external YAML dependency (BCL only).
 
 ## Security & traceability
-- **Why / rationale:** Fulfils step 6 (Document) of the workflow — docs projected from specs, not
-  written by hand. See [workflow.md](../docs/workflow.md) and [requirements-engineering.md](../docs/requirements-engineering.md).
+- **Why / rationale:** Fulfils step 6 (Document) of the workflow — docs projected from specs, not   written by hand. See [workflow.md](../docs/workflow.md) and [requirements-engineering.md](../docs/requirements-engineering.md).
 - **Source:** docs/workflow.md §6
 - **Threat mitigated (STRIDE):** —  ·  **ISO 24772:** —
 

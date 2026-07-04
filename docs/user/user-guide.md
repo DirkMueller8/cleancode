@@ -246,3 +246,40 @@ Allowed:   [ipaddr = US1]        (a symbol the user can already see)
 Rejected:  [ipaddr = 1.1.1.1]    (a raw guess — could confirm the hidden value if it matched)
 Allowed:   [http = POST]         (http is nonsensitive — exact values are fine)
 ```
+
+## Using the logging API
+
+### Enforce the logging session lifecycle order
+
+As an application author, I want a clear session protocol, so that I connect, declare my schema, log events, and disconnect in a well-defined order that the Logger enforces.
+
+The session shall accept `Hello` first, then any number of `Schema` or `Event` verbs, then `Goodbye`, and shall reject any verb issued out of this order.
+
+```
+Hello -> Schema -> Event -> Event -> Goodbye     (accepted)
+Event (before Hello)                             (rejected)
+Event (before a Schema is defined)               (rejected)
+Schema (after Goodbye)                            (rejected)
+```
+
+### Issue a high-entropy session token on Hello
+
+As a security owner, I want session tokens to be unguessable, so that another process can't hijack a logging session by guessing its token.
+
+When `Hello` is accepted, the session shall issue a token with at least 120 bits of entropy.
+
+```
+Hello -> token "9F2A…"   (>= 120 bits; DSS recommends ~20 base64 chars minimum)
+```
+
+### Invalidate the session token on Goodbye
+
+As a security owner, I want a session's token to stop working once the session ends, so that a leaked token can't be replayed after `Goodbye`.
+
+When `Goodbye` is processed, the session shall invalidate its token; resuming logging requires a new `Hello`.
+
+```
+Hello -> token issued, session Active
+Goodbye -> token invalidated, session Closed
+Event (after Goodbye) -> rejected (needs a new Hello)
+```

@@ -1,10 +1,12 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/Logger.Core/Logger.Core.csproj" />
+    <Project Path="src/Logger.Services/Logger.Services.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/DocGen.Tests/DocGen.Tests.csproj" />
     <Project Path="tests/Logger.Core.Tests/Logger.Core.Tests.csproj" />
+    <Project Path="tests/Logger.Services.Tests/Logger.Services.Tests.csproj" />
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools/DocGen/DocGen.csproj" />

@@ -13,6 +13,20 @@ requirement (step 5 of the [workflow](workflow.md)). Newest at the top.
 
 ---
 
+### 2026-07-04 — 0022–0025 Session state machine + in-memory store (Epic E)
+- **Concept:** State machine; layering (a new `Logger.Services` project depends on `Logger.Core`);
+  matching the failure mechanism to the *kind* of failure.
+- **Why this design:** `LoggingSession` models `Hello → Schema → Event* → Goodbye` as New→Active→Closed,
+  issuing a token via an injected `ITokenGenerator` (0023) and invalidating it on Goodbye (0024). Events
+  are stored in an append-only `InMemoryLogStore` (0025) only when valid. The service stubs live in a
+  *separate project* that references the core — the dependency points one way (services → core), which is
+  the layering lesson made concrete.
+- **Remember:** Two kinds of failure, two mechanisms — deliberately. An **out-of-order verb** (a
+  sequencing/contract violation) **throws**; an **invalid event's data** (expected bad input) returns a
+  `ValidationResult`. Not all "rejections" are the same: sequencing/programming errors are exceptions,
+  routine bad data is a result. Also: append-only is enforced by the *absence* of an update/delete method
+  — the illegal operation is unrepresentable, not just discouraged.
+
 ### 2026-07-04 — 0019/0020 Query by symbol + inference-attack guard (Epic D)
 - **Concept:** Security by design — making the *unsafe* operation unrepresentable, not just discouraged.
 - **Why this design:** `FilteredLogQueryEngine` matches on the pseudonym *symbol* (`US1`, hint stripped)

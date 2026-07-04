@@ -55,17 +55,19 @@ The Logger domain, decomposed. Authored files are linked; backlog rows become fi
 | [0020](0020-forbid-exact-match-on-filtered-fields.md) | Forbid exact-value match on filtered fields (inference guard) | Should | now | Done ✅ |
 | 0021 | Default ordering & paging | Could | later | Draft |
 
-### Epic E — Session RPC (in-memory stub) · DSS §6 *(backlog, milestone 2)*
-| #    | Title | Priority | Scope |
-|------|-------|----------|-------|
-| 0022 | Session lifecycle order (Hello → Schema/Event* → Goodbye) | Should | later |
-| 0023 | Issue a ≥120-bit session token | Could | later |
-| 0024 | Invalidate the token on Goodbye | Should | later |
+### Epic E — Session RPC (in-memory stub) · DSS §6  ✅ **complete**
+| #    | Title | Priority | Scope | Status |
+|------|-------|----------|-------|--------|
+| [0022](0022-session-lifecycle.md) | Session lifecycle order (Hello → Schema/Event* → Goodbye) | Should | now | Done ✅ |
+| [0023](0023-session-token.md) | Issue a ≥120-bit session token | Could | now | Done ✅ |
+| [0024](0024-token-invalidation.md) | Invalidate the token on Goodbye | Should | now | Done ✅ |
+
+Built in the `Logger.Services` project (in-memory service stubs; depends on `Logger.Core`).
 
 ### Epics F–H — Storage, retention, access *(mostly out-of-scope-infra)* · DSS §3, §5, §8, §9
 | #    | Title | Scope |
 |------|-------|-------|
-| 0025 | Append-only persistence (in-memory `ILogStore`) | later |
+| [0025](0025-append-only-store.md) | Append-only persistence (in-memory `ILogStore`) | now · Done ✅ |
 | 0029 | Storage-headroom alert (<10h) — pure calc | later |
 | 0031 | Retention-expiry evaluation (`IClock`) | later |
 | 0033 | Access-list config model (filtered/unfiltered/approval) | later |
